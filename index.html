@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=utf-8>
+		<title>Pong</title>
+		<style>
+			* { margin: 0 auto; padding: 0px; }
+			canvas { width: 100%; height: 100% }
+			.t { text-align:center; }
+			body { margin: 0 0 0 0; width: 100%; height: 100%; text-align:center; background:#000000 }
+			h1 { position: absolute; top: 125px; font-family: "Courier New", Monospace; font-size:60px; font-weight: bold; width: 100%; text-align: center; color: white; z-index: 100; display:block; }
+			#q { width: 400px; height: 400px; border-radius: 25px; border: 3px solid #8AC007; background-image: url('images/Classic.png'); }
+			#w { width: 150px; height: 40px; border-radius: 15px; border: 3px solid #FF0000; background-image: url('images/0.png'); }
+			#ad { width: 150px; top: 35px; border-radius: 15px; border: 3px solid yellow; }
+			#ak { width: 100px; height: 30px; border-radius: 15px; border: 3px solid #FF0000; background-image: url('images/b0.png'); }
+			#am { top: 30px; width: 100px; border-radius: 15px; border: 3px solid yellow; }
+			#u { display: none; }
+			#as { position: absolute; top: 200px; left: 45%; right: 45%; width: 10%; border-radius: 15px; border: 3px solid #FF0000; }
+			#a { position:absolute; top: 100px; width: 100%; color: white; z-index: 100; display:none; }
+			#d { position: absolute; top: 300px; width: 100%; color: white; z-index: 100; display:none; }
+			#g { position: absolute; top: 100px; left: 20%; right 20%; width: 60%; color: white; z-index: 100; display: none; }
+			#af { position: absolute; top: 300px; height: 50px; left: 30%; right 30%; width: 40%; color: white; z-index: 100; }
+			#ar { position: absolute; top: 450px; height: 100px; left: 35%; right: 35%; right 0%; width: 30%; color: white; z-index: 100; }
+			#i { width: 100%; color: white; z-index: 100; display:block; padding: 10px; }
+			button { -webkit-transition-duration: 0.4s; transition-duration: 0.4s; color: limegreen; z-index: 100; display:block; position: absolute; }
+			#f { top: 550px; width: 20%; left:40%; right:40%; height: 30px; background-color:#90bbff; border: 0px solid #90bbff; display:none; color: #fff; margin:0 auto; border-radius: 5px; padding: 5px; }
+			#f:hover { border: 5px solid white; box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19); }
+			.p { top: 60%; width: 30%; height: 100px; background-color:#90bbff; border: 0px solid #90bbff; color: #fff; border-radius: 50px; padding: 20px; }
+			.p:hover { border: 20px solid white; box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19); }
+			#e { left: 35%; }
+			.h { top: 200px; width: 20px; height: 20px; background-color:white; border: 3px solid red;  border-radius: 15px; padding: 20px; }
+			.h:hover { background-color: red; color: #fff; box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19); }
+			#m { left: 15%; }
+			#r { right: 15%; }
+			.ac { width: 15px; height: 15px; background-color: white; border: 3px solid limegreen; border-radius: 10px; padding:15px; }
+			.ac:hover { background-color: limegreen; color: #fff; box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19); }
+			#v { top: 15px; left: 25%; }
+			#aa { right: 25%; top: 15px; }
+			#ah { top: 10px; left: 25%; }
+			#al { top: 10px; right: 25%; }
+			#s { top: 380px; left: 47%; width: 20px; height: 20px; background-color:white; border: 5px solid yellow; border-radius: 5px; padding: 20px; }
+			#s:hover { background-color: yellow; color: #fff; box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19); }
+			#c { position: absolute; top: 300px;width: 100%; color: white; z-index: 100; display:none; }
+			#b { position: absolute; top: 100px; left: 50px; text-align: left; color: white; z-index: 100; display:none; }
+		</style>
+		<h1 id='h1'>Pong</h1>
+	</head>
+	<body>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r71/three.min.js"></script>
+		<script>
+			let j=0,ag=0,an=0;const au=["Classic","Cube","Block","Bounce","Blind","Tubes","Maze","Short","Long","Thin"],av=[[4.1893,49,49,41,47,100,1,100,120,45],[4.1893,49,49,41,47,100,1,100,120,45],[4.1893,49,49,41,47,100,1,100,120,45],[4.1893,49,49,41,47,100,1,100,120,45],[4.1893,49,49,41,47,100,1,100,120,45],[4.1893,49,49,41,47,100,1,100,120,45],[4.1893,49,49,41,47,100,1,100,120,45],[4.1893,49,24,16,22,100,1,50,120,20],[6.28395,49,74,66,72,100,1,150,180,70],[4.1893,24,49,41,47,50,1,100,120,45]];function l(){"Customize"==document.getElementById("f").innerHTML?(document.getElementById("f").innerHTML="Back",document.getElementById("u").style.display="block",document.getElementById("g").style.display="none"):(document.getElementById("f").innerHTML="Customize",document.getElementById("u").style.display="none",document.getElementById("g").style.display="block")}function k(){document.getElementById("e").style.display="none",document.getElementById("g").style.display="block",document.getElementById("f").style.display="block",document.getElementById("h1").style.display="none"}function o(e){j+=e,document.getElementById("i").innerHTML=au[j],document.getElementById("q").style.backgroundImage="url(images/"+au[j]+".png)"}function ae(e){ag+=e,document.getElementById("w").style.backgroundImage="url(images/"+ag+".png)"}function at(e){an+=e,document.getElementById("ak").style.backgroundImage="url(images/b"+an+".png)"}function t(){let e,o;0==ag?e=new THREE.Mesh(new THREE.BoxGeometry(15,3,3),new THREE.MeshBasicMaterial({color:parseInt(document.getElementById("ad").value,16)})):1==ag?e=new THREE.Mesh(new THREE.BoxGeometry(15,3,3),new THREE.MeshPhongMaterial({color:parseInt(document.getElementById("ad").value,16)})):2==ag&&(e=new THREE.Mesh(new THREE.BoxGeometry(15,3,3),new THREE.MeshBasicMaterial({color:parseInt(document.getElementById("ad").value,16),wireframe:!0}))),0==an&&(o=new THREE.Mesh(new THREE.BoxGeometry(2,2,2),new THREE.MeshBasicMaterial({color:parseInt(document.getElementById("am").value,16)}))),1==an&&(o=new THREE.Mesh(new THREE.BoxGeometry(2,2,2),new THREE.MeshPhongMaterial({color:parseInt(document.getElementById("am").value,16)}))),2==an&&(o=new THREE.Mesh(new THREE.BoxGeometry(2,2,2),new THREE.MeshBasicMaterial({color:parseInt(document.getElementById("am").value,16),wireframe:!0})));let n,t,s=0,a=0,E=document.getElementById("d"),l=document.getElementById("c"),d=document.getElementById("a"),r=new THREE.WebGLRenderer;function p(){o.position.x=0,o.position.z=0,n=Math.random()<.5?-Math.random():Math.random(),t=Math.random()<.5?-.8-Math.random():Math.random()+.8,s=0,a=0,d.innerHTML="0 | 0"}let h=.5,m=new THREE.PerspectiveCamera(50,(window.innerWidth-10)/(window.innerHeight-10),1,1e3),y=1,M=!1;const w=av[j][0],c=av[j][1];let H=!0;function T(e,i,s,a){return o.position.z>e-Math.abs(t)&&o.position.z<i+Math.abs(t)&&o.position.x>s-Math.abs(n)&&o.position.x<a+Math.abs(n)&&(H=!(o.position.x<=s+Math.abs(n)||o.position.x>=a-Math.abs(n)),!0)}document.onkeydown=function(o){"37"==(o=o||window.event).keyCode&&e.position.x>-c?e.position.x-=2:"39"==o.keyCode&&e.position.x<c?e.position.x+=2:"82"==o.keyCode?p():0+o.keyCode>47&&0+o.keyCode<58?h=.2*(o.keyCode-47):"80"==o.keyCode?(M=!M,E.style.display=1==M?"block":"none"):"32"==o.keyCode&&"block"==l.style.display?(l.style.display="none",E.style.display="block"):"188"==o.keyCode?(m.position.x-=w*Math.cos(.0349066*(y-.5)),m.position.z-=w*Math.sin(.0349066*y),m.rotation.y-=.0349066,y++):"190"==o.keyCode?(m.position.x+=w*Math.cos(.0349066*(y-.5)),m.position.z+=w*Math.sin(.0349066*y),m.rotation.y+=.0349066,y--):"27"==o.keyCode&&(document.body.removeChild(r.domElement),M=!1,document.getElementById("b").style.display="none",E.style.display="none",l.style.display="none",d.style.display="none",document.getElementById("e").style.display="block")},document.onclick=function(o){o.screenX<window.innerWidth/2&&e.position.x>-c?e.position.x-=2:o.screenX>window.innerWidth/2&&e.position.x<c&&(e.position.x+=2)};let R=new THREE.Mesh(new THREE.BoxGeometry(av[j][5],av[j][6],av[j][7]),new THREE.MeshPhongMaterial({color:parseInt(document.getElementById("as").value,16)})),g=new THREE.Mesh(new THREE.BoxGeometry(15,3,3),new THREE.MeshPhongMaterial({color:3364351})),x=new THREE.DirectionalLight(16777215,1),u=new THREE.PointLight(16777215,1,0,1);u.position.set(50,50,50),x.position.set(100,200,150),m.position.set(0,30,av[j][8]),e.position.set(0,3,av[j][9]),g.position.set(0,3,-av[j][9]),o.position.y=3;let B=new THREE.Scene;B.add(u),B.add(x),B.add(R),B.add(e),B.add(g),B.add(o);let f,I,k=[];if(1==j){k=[[-13,13,-13,13]];let e=new THREE.Mesh(new THREE.BoxGeometry(25,25,25),new THREE.MeshPhongMaterial({color:16776960}));B.add(e)}else if(2==j)I=1,f=new THREE.Mesh(new THREE.BoxGeometry(25,10,5),new THREE.MeshPhongMaterial({color:16776960})),B.add(f);else if(3==j){k=[[-28,28,-28,28],[32,38,-50,-25],[32,38,25,50],[-38,-32,-50,-25],[-38,-32,25,50]];let e=new THREE.Mesh(new THREE.BoxGeometry(50,20,50),new THREE.MeshPhongMaterial({color:16776960})),o=new THREE.Mesh(new THREE.BoxGeometry(25,20,5),new THREE.MeshPhongMaterial({color:16776960})),n=new THREE.Mesh(new THREE.BoxGeometry(25,20,5),new THREE.MeshPhongMaterial({color:16776960})),t=new THREE.Mesh(new THREE.BoxGeometry(25,20,5),new THREE.MeshPhongMaterial({color:16776960})),i=new THREE.Mesh(new THREE.BoxGeometry(25,20,5),new THREE.MeshPhongMaterial({color:16776960}));o.position.set(37.5,10,35),n.position.set(-37.5,10,35),t.position.set(37.5,10,-35),i.position.set(-37.5,10,-35),B.add(e),B.add(o),B.add(n),B.add(t),B.add(i)}else if(4==j){let e=new THREE.Mesh(new THREE.BoxGeometry(100,20,5),new THREE.MeshPhongMaterial({color:16776960}));B.add(e)}else if(5==j){k=[[-3,3,-10,10],[-26,26,-12,-8],[-26,26,8,12],[-26,26,-32,-28],[-26,26,28,32],[-3,3,-50,-25],[14,21,-25,25]];let e=new THREE.Mesh(new THREE.BoxGeometry(5,15,50),new THREE.MeshPhongMaterial({color:16776960})),o=new THREE.Mesh(new THREE.BoxGeometry(5,15,50),new THREE.MeshPhongMaterial({color:16776960})),n=new THREE.Mesh(new THREE.BoxGeometry(5,15,50),new THREE.MeshPhongMaterial({color:16776960})),t=new THREE.Mesh(new THREE.BoxGeometry(5,15,50),new THREE.MeshPhongMaterial({color:16776960})),i=new THREE.Mesh(new THREE.BoxGeometry(20,15,5),new THREE.MeshPhongMaterial({color:16776960})),s=new THREE.Mesh(new THREE.BoxGeometry(20,15,5),new THREE.MeshPhongMaterial({color:16776960})),a=new THREE.Mesh(new THREE.BoxGeometry(20,15,5),new THREE.MeshPhongMaterial({color:16776960})),E=new THREE.Mesh(new THREE.BoxGeometry(30,5,50),new THREE.MeshPhongMaterial({color:16776960})),l=new THREE.Mesh(new THREE.BoxGeometry(30,5,50),new THREE.MeshPhongMaterial({color:16776960}));e.position.set(30,10,0),o.position.set(-30,10,0),n.position.set(10,10,0),t.position.set(-10,10,0),i.position.set(37.5,10,0),s.position.set(-37.5,10,0),a.position.set(0,10,0),E.position.set(20,15,0),l.position.set(-20,15,0),B.add(e),B.add(o),B.add(n),B.add(t),B.add(i),B.add(s),B.add(a),B.add(E),B.add(l)}else if(6==j){k=[[-3,3,-50,-25],[-3,3,25,50],[14,21,-25,25],[-21,-14,-25,25],[32,38,-50,-25],[32,38,25,50],[-38,-32,-50,-25],[-38,-32,25,50]];let e=new THREE.Mesh(new THREE.BoxGeometry(25,20,5),new THREE.MeshPhongMaterial({color:16776960})),o=new THREE.Mesh(new THREE.BoxGeometry(25,20,5),new THREE.MeshPhongMaterial({color:16776960})),n=new THREE.Mesh(new THREE.BoxGeometry(25,20,5),new THREE.MeshPhongMaterial({color:16776960})),t=new THREE.Mesh(new THREE.BoxGeometry(25,20,5),new THREE.MeshPhongMaterial({color:16776960})),i=new THREE.Mesh(new THREE.BoxGeometry(25,20,5),new THREE.MeshPhongMaterial({color:16776960})),s=new THREE.Mesh(new THREE.BoxGeometry(25,20,5),new THREE.MeshPhongMaterial({color:16776960})),a=new THREE.Mesh(new THREE.BoxGeometry(50,20,5),new THREE.MeshPhongMaterial({color:16776960})),E=new THREE.Mesh(new THREE.BoxGeometry(50,20,5),new THREE.MeshPhongMaterial({color:16776960}));e.position.set(37.5,10,35),o.position.set(-37.5,10,35),n.position.set(37.5,10,-35),t.position.set(-37.5,10,-35),i.position.set(37.5,10,0),s.position.set(-37.5,10,0),a.position.set(0,10,17.5),E.position.set(0,10,-17.5),B.add(e),B.add(o),B.add(n),B.add(t),B.add(i),B.add(s),B.add(a),B.add(E)}let G=av[j][2],P=av[j][3],b=av[j][4];r.setSize(window.innerWidth-10,window.innerHeight-10),document.body.appendChild(r.domElement),document.getElementById("g").style.display="none",document.getElementById("f").style.display="none",document.getElementById("h1").style.display="block",document.getElementById("b").style.display="block",d.style.display="block",p(),function E(){if(requestAnimationFrame(E),r.render(B,m),!M){if(o.position.x+=n,o.position.z+=t,o.position.x<=-c||o.position.x>=c)for(n=-n;o.position.x<=-c||o.position.x>=c;)o.position.x+=n,o.position.z+=t;if(o.position.z<=-G)for(s++,t=-t-.1,n*=.6+Math.random(),d.innerHTML=s+" | "+a,o.position.x+=n,o.position.z+=t;o.position.z<=-G;)o.position.x+=n,o.position.z+=t;else if(o.position.z>=G)for(a++,t=.1-t,n*=.6+Math.random(),d.innerHTML=s+" | "+a,o.position.x+=n,o.position.z+=t;o.position.z>=G;)o.position.x+=n,o.position.z+=t;if(T(-P,-b,g.position.x-7.5,g.position.x+7.5))for(H&&(t=.1-t),n*=.6+Math.random();T(-P,-b,g.position.x-7.5,g.position.x+7.5);)o.position.x+=n,o.position.z+=t;else if(T(P,b,e.position.x-7.5,e.position.x+7.5))for(H&&(t=-t-.1),n*=.6+Math.random();T(P,b,e.position.x-7.5,e.position.x+7.5);)o.position.x+=n,o.position.z+=t;if(0!=k.length){for(i=0;i<k.length;i++)if(T(k[i][0],k[i][1],k[i][2],k[i][3])){for(H&&(t=-t),n=-n*(.6+Math.random());T(k[i][0],k[i][1],k[i][2],k[i][3]);)o.position.x+=n,o.position.z+=t;break}}else if(2==j&&T(-3,3,f.position.x-13,f.position.x+13))for(t=-t,n*=.6+Math.random();T(-3,3,f.position.x-13,f.position.x+13);)o.position.x+=n,o.position.z+=t;for(;n>1.5;)n-=.1;for(;n<-1.5;)n+=.1;for(;t>5;)t-=.5;for(;t<-5;)t+=.5;for(;n<.5&&n>=0;)n+=.1;for(;n>-.5&&n<=0;)n-=.1;for(;t<1&&t>=0;)t+=.1;for(;t>-1&&t<=0;)t-=.1;g.position.x<o.position.x&&g.position.x+h<o.position.x?g.position.x+=h:g.position.x>o.position.x&&g.position.x-h>o.position.x&&(g.position.x-=h),o.rotation.x+=.05,o.rotation.y+=.05,2==j&&((f.position.x>35||f.position.x<-35)&&(I=-I),f.position.x+=I),a+s>=100&&(l.innerHTML=s>a?"Player wins. Click Space to continue":"AI wins. Click Space to continue",p(),M=!M,l.style.display="block")}}()}
+		</script>
+		<div id="a" class='t'>0 | 0</div>
+		<div id="b">R to reset<br>P to pause<br>Arrows to move<br>Numbers for AI level<br>&lt;&gt; to rotate<br>The game ends<br>when the total<br>points exceed 100</div>
+		<div id="c" class='t'></div>
+		<div id="d" class='t'>Paused. Press P to continue</div>
+		<button id='e' class='p t' onclick="k();">Play</button>
+		<button id='f' class='t' onclick='l();' >Customize</button>
+		<div id='g' class='t'>
+			<div id='i' class='t'>Classic</div>
+			<button id='m' class='h t' onclick="j>0&&o(-1);">&lt;</button>
+			<div id='q'></div>
+			<button id='r' class='h t' onclick="j<9&&o(1);">&gt;</button>
+			<button id='s' class='t' onclick="t();">^</button>
+		</div>
+		<div id='u'>
+			<div id='af'>
+				<button id='v' class='ac t' onclick="ag>0&&ae(-1);">&lt;</button>
+				<div id='w'></div>
+				<button id='aa' class='ac t' onclick="ag<2&&ae(1);">&gt;</button>
+				<input id='ad' type="text" value="0x3355ff"></input>
+			</div>
+			<div id='ar'>
+				<button id='ah' class='ac t' onclick="an>0&&at(-1);">&lt;</button>
+				<div id='ak'></div>
+				<button id='al' class='ac t' onclick="an<2&&at(1);">&gt;</button>
+				<input id='am' type="text" value="0xff5555"></input>
+			</div>
+			<input id='as' type="text" value="0x77ff77"></input>
+		</div>
+	</body>
+</html>
